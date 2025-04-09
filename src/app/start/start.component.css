@@ -1,0 +1,8 @@
+.powerup{
+    width: 100vw;
+}
+.powerup button{
+    margin: 1rem;
+    position: absolute;
+    right: 0;
+}
