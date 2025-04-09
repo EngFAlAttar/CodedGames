@@ -1,7 +1,13 @@
 <div class="powerup">
-    <button mat-flat-button (click)="setPowerup(boosterName)">{{ boosterName }}</button>
+    <button mat-flat-button (click)="setPowerup(boosterName)"
+    [hidden]="boosterName === ''">{{ boosterName }}</button>
 </div>
 <div class="container">
-    <button mat-flat-button (click)="updateScore(currentInceremt)">Graphis</button>
+    <div class="content">
+    <!-- <button mat-flat-button (click)="updateScore(currentInceremt)">Graphis</button> -->
+     <div (click)="updateScore(currentInceremt)">
+        <img src="{{gifSource[currentFrameIndex]}}" alt="swimming gif" />
+     </div>
     <h3>{{ currentScore }}</h3>
+    </div>
 </div>
