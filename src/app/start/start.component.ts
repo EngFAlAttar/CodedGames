@@ -6,6 +6,7 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { MatSliderModule} from '@angular/material/slider';
 import {FormsModule} from '@angular/forms';
 import { NgStyle } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-start',
@@ -78,6 +79,29 @@ boosterButtonState = 'initial';
       }
       this.currentFrameIndex = (this.currentFrameIndex + 1)%this.gifSource.length;
     }
+    if(this.currentScore>=this.maxDistance)
+    {
+      this.changeIsland()
+      Swal.fire({
+        title: "You Did it!",
+        text: "You have survived!!!",
+        imageUrl:"https://img.freepik.com/premium-vector/pixel-art-illustration-confetti-pixelated-party-party-trumpet-icon-pixelated-pixel-art_1038602-615.jpg",
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `
+        }
+      });
+    }
    
   }
 
@@ -97,22 +121,32 @@ boosterButtonState = 'initial';
  
  }
  changeIsland(){
-  if(this.currentScore === this.maxDistance){
+  if(this.currentScore >= this.maxDistance){
     return {
       'width': '300px',
       'height': 'auto',
       'position': 'fixed',
-      'right': '1rem',
+      'right': '500px',
       'align-self': 'center',
       'margin-top': '5rem',
     };
+}
+else if(this.currentScore > this.maxDistance*0.9){
+  return {
+    'width': '300px',
+    'height': 'auto',
+    'position': 'fixed',
+    'right': '200px',
+    'align-self': 'center',
+    'margin-top': '5rem',
+  };
 }
 else if(this.currentScore > this.maxDistance*0.75){
     return {
       'width': '300px',
       'height': 'auto',
       'position': 'fixed',
-      'right': '-80px',
+      'right': '0px',
       'align-self': 'center',
       'margin-top': '5rem',
     };
