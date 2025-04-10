@@ -1,7 +1,8 @@
 <div class="powerup">
-    <button mat-flat-button (click)="setPowerup(boosterName)"
-    [hidden]="boosterName === ''">{{ boosterName }}</button>
+    <button class="iconImg" mat-button (click)="setPowerup(boosterName)" [@activateBooster]="boosterButtonState" (@activateBooster.done)="appliedBooster()"
+    [hidden]="boosterName === ''"><i><img src="{{currentBooster?.img}}" class="iconImg"></i></button>
 </div>
+
 <div class="container">
     <div class="content">
     <!-- <button mat-flat-button (click)="updateScore(currentInceremt)">Graphis</button> -->
@@ -9,5 +10,21 @@
         <img src="{{gifSource[currentFrameIndex]}}" alt="swimming gif" />
      </div>
     <h3>{{ currentScore }}</h3>
+    <img class="island"  [ngStyle]="changeIsland()" src="/assets/island.png" />
     </div>
 </div>
+<div class="distanceBarContainer">
+    <div>
+
+    </div>
+    <div class="distanceBar">
+        <mat-progress-bar mode="determinate" value="{{currentScore/maxDistance*100}}"></mat-progress-bar>
+    </div>
+    <div class="islandIcon">
+        <img width="50px" src="/assets/island.png">
+
+    </div>
+</div>
+
+
+
