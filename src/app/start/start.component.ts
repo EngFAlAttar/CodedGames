@@ -7,6 +7,8 @@ import { MatSliderModule} from '@angular/material/slider';
 import {FormsModule} from '@angular/forms';
 import { NgStyle } from '@angular/common';
 import Swal from 'sweetalert2';
+import { Route, Router, RouterModule } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-start',
@@ -39,9 +41,15 @@ import Swal from 'sweetalert2';
 })
 export class StartComponent {
   @Output() setTotalScore = new EventEmitter<number>();
-  @HostListener('window:keydown.Space',['$event']) spaceButton(e:KeyboardEvent):void{
-    // this.updateScore(this.currentInceremt);
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.code === 'Space') {
+      event.preventDefault(); // Optional: Prevent page scroll
+      // Call your logic here
+      this.updateScore(this.currentInceremt);
+    }
   }
+
   currentScore = 0;
   maxDistance = 5000;
   currentInceremt = 1;
@@ -66,7 +74,11 @@ export class StartComponent {
     '/assets/splitGIF/frame_29_delay-0.03s.gif']
   currentFrameIndex = 0;
 boosterButtonState = 'initial';
+private timerSub?: Subscription;
 
+  constructor(private route: Router){
+
+  }
 
   updateScore(incremntAmount: number){
     if(this.currentScore<this.maxDistance)
@@ -81,7 +93,7 @@ boosterButtonState = 'initial';
     }
     if(this.currentScore>=this.maxDistance)
     {
-      this.changeIsland()
+      this.stopTimer();
       Swal.fire({
         title: "You Did it!",
         text: "You have survived!!!",
@@ -100,6 +112,10 @@ boosterButtonState = 'initial';
             animate__faster
           `
         }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.route.navigateByUrl('')
+        }
       });
     }
    
@@ -111,8 +127,10 @@ boosterButtonState = 'initial';
     console.log("pwering up: ", pUp);
     if(pUp){
       this.currentBooster = pUp;
-      this.currentInceremt = pUp?.incrementAmount;
+      this.currentInceremt += pUp?.incrementAmount;
       this.notUsedPowerUps = this.notUsedPowerUps.filter(p => p.booster != pUp.booster);
+      if(pUp.booster === "Lifebuoy")
+        this.startTimer();
     }
   }
   appliedBooster(){
@@ -186,5 +204,21 @@ else if(this.currentScore > this.maxDistance*0.75){
         'visibility': 'hidden'
       }
   }
-}
+  }
+
+  startTimer() {
+    this.timerSub = interval(500).subscribe(() => {
+        this.updateScore(this.currentBooster?.incrementAmount ?? this.currentInceremt);
+      });
+  }
+
+  stopTimer() {
+    this.timerSub?.unsubscribe();
+    this.timerSub = undefined;
+  }
+
+  showShark():boolean
+  {
+    return this.currentScore >= this.maxDistance/2
+  }
 }

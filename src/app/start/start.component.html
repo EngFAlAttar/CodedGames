@@ -11,6 +11,7 @@
      </div>
     <h3>{{ currentScore }}</h3>
     <img class="island"  [ngStyle]="changeIsland()" src="/assets/island.png" />
+    <img [hidden]="!showShark()" class="shark" src="/assets/icons/shark.gif" alt="shark">
     </div>
 </div>
 <div class="distanceBarContainer">
@@ -25,6 +26,7 @@
 
     </div>
 </div>
+<!-- <input hidden="true" (keydown.space)="updateScore(currentInceremt)"> -->
 
 
 
